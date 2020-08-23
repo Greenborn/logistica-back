@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use yii\behaviors\TimestampBehavior;
 /**
  * This is the model class for table "shipping".
  *
@@ -27,6 +27,7 @@ use Yii;
  */
 class Shipping extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -41,8 +42,8 @@ class Shipping extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'price', 'date'], 'required'],
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'destination_sucursal'], 'integer'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'price'], 'required'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office'], 'integer'],
             [['price'], 'number'],
             [['origin_full_name', 'origin_contact', 'destination_full_name', 'destination_contact'], 'string', 'max' => 45],
             [['destination_address'], 'string', 'max' => 50],
@@ -50,6 +51,8 @@ class Shipping extends \yii\db\ActiveRecord
             [['shipping_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShippingType::className(), 'targetAttribute' => ['shipping_type_id' => 'id']],
             [['distance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Distance::className(), 'targetAttribute' => ['distance_id' => 'id']],
             [['service_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ServiceType::className(), 'targetAttribute' => ['service_type_id' => 'id']],
+            [['origin_branch_office'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['origin_branch_office' => 'id']],
+            [['destination_branch_office'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['destination_branch_office' => 'id']],
         ];
     }
 
@@ -67,9 +70,21 @@ class Shipping extends \yii\db\ActiveRecord
             'distance_id' => 'Distance ID',
             'service_type_id' => 'Service Type ID',
             'shipping_type_id' => 'Shipping Type ID',
+            'origin_address' => 'Origin Address',
             'destination_address' => 'Destination Address',
-            'destination_sucursal' => 'Destination Sucursal',
+            'origin_branch_office' => 'Origin Branch Office',
+            'destination_branch_office' => 'Destination Branch Office',
             'price' => 'Price',
+        ];
+    }
+
+    public function behaviors() {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'date',
+                'updatedAtAttribute' => false,
+            ],
         ];
     }
 
@@ -111,5 +126,47 @@ class Shipping extends \yii\db\ActiveRecord
     public function getShippingItems()
     {
         return $this->hasMany(ShippingItem::className(), ['shipping_id' => 'id'])->inverseOf('shipping');
+    }
+
+    /**
+     * Gets query for [[OriginBranchOffice]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOriginBranchOffice()
+    {
+        return $this->hasOne(BranchOffice::className(), ['id' => 'origin_branch_office'])->inverseOf('shippings0');
+    }
+
+    /**
+     * Gets query for [[DestinationBranchOffice]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDestinationBranchOffice()
+    {
+        return $this->hasOne(BranchOffice::className(), ['id' => 'destination_branch_office'])->inverseOf('shippings');
+    }
+
+    public function fields() {
+        $fields = parent::fields();
+
+        // quita los campos con información sensible
+        unset( $fields['shipping_type_id'],
+               $fields['distance_id'],
+               $fields['service_type_id'],
+               $fields['destination_branch_office'],
+               $fields['origin_branch_office']
+             );
+
+        return $fields;
+    }
+
+    public function extraFields() {
+        return [ 'originBranchOffice',
+                 'serviceType',
+                 'destinationBranchOffice',
+                 'shippingType'
+               ];
     }
 }

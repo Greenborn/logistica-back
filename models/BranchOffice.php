@@ -69,4 +69,23 @@ class BranchOffice extends \yii\db\ActiveRecord
     {
         return $this->hasMany(User::className(), ['branch_office_id' => 'id'])->inverseOf('branchOffice');
     }
+    /**
+      * Gets query for [[Shippings]].
+      *
+      * @return \yii\db\ActiveQuery
+     */
+    public function getShippings()
+    {
+       return $this->hasMany(Shipping::className(), ['destination_branch_office' => 'id'])->inverseOf('destinationBranchOffice');
+    }
+
+   /**
+     * Gets query for [[Shippings0]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShippings0()
+    {
+        return $this->hasMany(Shipping::className(), ['origin_branch_office' => 'id'])->inverseOf('originBranchOffice');
+    }
 }
