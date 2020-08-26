@@ -1,6 +1,9 @@
-#copied from concept
+
+stages:
+  - deploy
 
 api:
+  stage: deploy
   variables:
     ROOT : "/var/www/logistica-api.coodesoft.com.ar"
   script:
