@@ -1,0 +1,12 @@
+#copied from concept
+
+api:
+  variables:
+    ROOT : "/var/www/logistica-api.coodesoft.com.ar"
+  script:
+    - sudo cp config/web.php "$ROOT/config"
+    - sudo cp controllers/* "$ROOT/controllers"
+    - sudo cp models/* "$ROOT/models"
+
+rules:
+  - if: $CI_COMMIT_BRANCH == 'dev'
