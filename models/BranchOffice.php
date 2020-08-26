@@ -93,7 +93,7 @@ class BranchOffice extends \yii\db\ActiveRecord
       return [ 'incomingShipping' => function(){
                   return $this->shippings;
                },
-               'outcomingShipping' => function(){
+               'outgoingShipping' => function(){
                   return $this->shippings0;
                },
                'user' ,
