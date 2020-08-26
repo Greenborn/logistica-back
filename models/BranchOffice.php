@@ -88,4 +88,17 @@ class BranchOffice extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Shipping::className(), ['origin_branch_office' => 'id'])->inverseOf('originBranchOffice');
     }
+
+    public function extraFields(){
+      return [ 'incomingShipping' => function(){
+                  return $this->shippings;
+               },
+               'outgoingShipping' => function(){
+                  return $this->shippings0;
+               },
+               'user' ,
+               'serviceType',
+               'shippingType'];
+    }
+
 }

@@ -30,6 +30,12 @@ $config = [
                 [ 'class' => 'yii\rest\UrlRule',
                   'controller' => 'shipping',
                 ],
+                [ 'class' => 'yii\rest\UrlRule',
+                  'controller' => 'distance',
+                ],
+                [ 'class' => 'yii\rest\UrlRule',
+                  'controller' => 'branch-office',
+                ],
             ],
         ],
         'request' => [
