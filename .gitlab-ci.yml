@@ -10,5 +10,6 @@ api:
     - sudo cp config/web.php "$ROOT/config"
     - sudo cp controllers/* "$ROOT/controllers"
     - sudo cp models/* "$ROOT/models"
+    - sudo cp actions/* "$ROOT/actions"
   rules:
     - if: $CI_COMMIT_BRANCH == 'dev'
