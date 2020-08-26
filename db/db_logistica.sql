@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost
--- Tiempo de generación: 22-08-2020 a las 06:23:53
+-- Tiempo de generación: 26-08-2020 a las 21:13:38
 -- Versión del servidor: 10.4.13-MariaDB
 -- Versión de PHP: 7.4.7
 
@@ -48,7 +48,8 @@ CREATE TABLE `branch_office` (
 --
 
 INSERT INTO `branch_office` (`id`, `name`) VALUES
-(1, 'Tandil');
+(1, 'Tandil'),
+(2, 'Mar del Plata');
 
 -- --------------------------------------------------------
 
@@ -88,8 +89,9 @@ CREATE TABLE `distance` (
 --
 
 INSERT INTO `distance` (`id`, `description`) VALUES
-(1, '50'),
-(2, '100');
+(1, '50 km'),
+(2, '100 km'),
+(3, '150 km');
 
 -- --------------------------------------------------------
 
@@ -143,8 +145,10 @@ CREATE TABLE `shipping` (
   `distance_id` int(11) NOT NULL,
   `service_type_id` int(11) NOT NULL,
   `shipping_type_id` int(11) NOT NULL,
+  `origin_address` varchar(50) DEFAULT NULL,
   `destination_address` varchar(50) DEFAULT NULL,
-  `destination_sucursal` int(11) DEFAULT NULL,
+  `origin_branch_office` int(11) DEFAULT NULL,
+  `destination_branch_office` int(11) DEFAULT NULL,
   `price` float NOT NULL,
   `date` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -153,10 +157,13 @@ CREATE TABLE `shipping` (
 -- Volcado de datos para la tabla `shipping`
 --
 
-INSERT INTO `shipping` (`id`, `origin_full_name`, `origin_contact`, `destination_full_name`, `destination_contact`, `distance_id`, `service_type_id`, `shipping_type_id`, `destination_address`, `destination_sucursal`, `price`, `date`) VALUES
-(1, '\'Laion\'', '\'123123123\'', '\'Lalin\'', '\'123123123\'', 1, 1, 1, NULL, 1, 120.5, ''),
-(2, '\'Laion\'', '\'123123123\'', '\'Lalin\'', '\'123123123\'', 1, 1, 1, NULL, 1, 120.5, ''),
-(3, '\'Laion laion\'', '\'123123123\'', '\'Lalin\'', '\'123123123\'', 1, 1, 1, NULL, 1, 120.5, '\'1598054400\'');
+INSERT INTO `shipping` (`id`, `origin_full_name`, `origin_contact`, `destination_full_name`, `destination_contact`, `distance_id`, `service_type_id`, `shipping_type_id`, `origin_address`, `destination_address`, `origin_branch_office`, `destination_branch_office`, `price`, `date`) VALUES
+(1, 'la pipol', '123123123', 'Lalin', '123123123', 1, 1, 1, NULL, NULL, 1, 2, 120.5, ''),
+(2, 'Lalin', '123123123', 'Lalin', '123123123', 1, 1, 1, NULL, NULL, 1, 2, 120.5, ''),
+(3, 'la pipol', '123123123', 'Lalin', '123123123', 1, 1, 1, NULL, NULL, 1, 2, 120.5, '1598054400'),
+(4, 'Laionel Díaz', '123123123 12', 'Lalin y Lalon', '12331231 23', 1, 1, 1, NULL, NULL, 1, 2, 120.5, '1598138612'),
+(5, 'Laionel Díaz de la zamponia', '123123123 12', 'Lalin y Lalon y lalazo', '12331231 23', 1, 1, 1, NULL, NULL, 1, 2, 122.5, '1598140517'),
+(6, 'Marco Antonio Solis', '123123123 12', 'Maracaibo y andresito', '12331231 23', 1, 1, 1, NULL, NULL, 1, 2, 120.5, '1598142750');
 
 -- --------------------------------------------------------
 
@@ -271,8 +278,9 @@ ALTER TABLE `shipping`
   ADD PRIMARY KEY (`id`),
   ADD KEY `distance_index` (`distance_id`),
   ADD KEY `service_type_index` (`service_type_id`),
-  ADD KEY `shippint_type_index` (`shipping_type_id`),
-  ADD KEY `destination_sucursal_index` (`destination_sucursal`);
+  ADD KEY `destination_branch_office` (`destination_branch_office`),
+  ADD KEY `shipping_type_index` (`shipping_type_id`) USING BTREE,
+  ADD KEY `origin_branch_office_index` (`origin_branch_office`);
 
 --
 -- Indices de la tabla `shipping_item`
@@ -304,13 +312,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `branch_office`
 --
 ALTER TABLE `branch_office`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `distance`
 --
 ALTER TABLE `distance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `role`
@@ -328,7 +336,7 @@ ALTER TABLE `service_type`
 -- AUTO_INCREMENT de la tabla `shipping`
 --
 ALTER TABLE `shipping`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `shipping_item`
@@ -372,7 +380,9 @@ ALTER TABLE `branch_office_has_shipping_type`
 ALTER TABLE `shipping`
   ADD CONSTRAINT `shipping_ibfk_1` FOREIGN KEY (`shipping_type_id`) REFERENCES `shipping_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `shipping_ibfk_2` FOREIGN KEY (`distance_id`) REFERENCES `distance` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `shipping_ibfk_3` FOREIGN KEY (`service_type_id`) REFERENCES `service_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `shipping_ibfk_3` FOREIGN KEY (`service_type_id`) REFERENCES `service_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `shipping_ibfk_4` FOREIGN KEY (`destination_branch_office`) REFERENCES `branch_office` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `shipping_ibfk_5` FOREIGN KEY (`origin_branch_office`) REFERENCES `branch_office` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `shipping_item`
