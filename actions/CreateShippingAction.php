@@ -56,7 +56,7 @@ class CreateShippingAction extends CreateAction {
            }
 
         } elseif ($model->hasErrors()) {
-          $response->setStatusCode(200);
+          $response->setStatusCode(400);
           $response->format = \yii\web\Response::FORMAT_JSON;
           $response->data = $model->getErrors();
         } else {
