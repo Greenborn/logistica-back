@@ -16,4 +16,11 @@ class ShippingController extends ActiveController {
         'query' => Shipping::find(),
       ]);
     }
+
+    public function actions(){
+      $actions = parent::actions();
+      $actions['create']['class'] = 'app\actions\CreateShippingAction';
+      return $actions;
+
+    }
 }
