@@ -36,6 +36,9 @@ $config = [
                 [ 'class' => 'yii\rest\UrlRule',
                   'controller' => 'branch-office',
                 ],
+                [ 'class' => 'yii\rest\UrlRule',
+                  'controller' => 'shipping-type',
+                ],
             ],
         ],
         'request' => [
