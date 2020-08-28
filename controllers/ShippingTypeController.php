@@ -13,7 +13,7 @@ class ShippingTypeController extends ActiveController {
 
     public function actionIndex() {
       return new ActiveDataProvider([
-        'query' => Distance::find(),
+        'query' => ShippingType::find(),
       ]);
     }
 }

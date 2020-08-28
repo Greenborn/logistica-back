@@ -13,7 +13,7 @@ class BranchOfficeController extends ActiveController {
 
     public function actionIndex() {
       return new ActiveDataProvider([
-        'query' => Shipping::find(),
+        'query' => BranchOffice::find(),
       ]);
     }
 }
