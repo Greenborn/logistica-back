@@ -39,6 +39,9 @@ $config = [
                 [ 'class' => 'yii\rest\UrlRule',
                   'controller' => 'shipping-type',
                 ],
+                [ 'class' => 'yii\rest\UrlRule',
+                  'controller' => 'service-type',
+                ],
             ],
         ],
         'request' => [
