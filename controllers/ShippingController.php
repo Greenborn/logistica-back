@@ -20,6 +20,7 @@ class ShippingController extends ActiveController {
     public function actions(){
       $actions = parent::actions();
       $actions['create']['class'] = 'app\actions\CreateShippingAction';
+      $actions['update']['class'] = 'app\actions\UpdateShippingAction';
       return $actions;
 
     }
