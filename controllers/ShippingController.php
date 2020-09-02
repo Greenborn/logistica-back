@@ -25,12 +25,6 @@ class ShippingController extends ActiveController {
         return $behaviors;
     }
 
-
-    public function actionIndex() {
-
-
-    }
-
     public function actions(){
       $actions = parent::actions();
       $actions['create']['class'] = 'app\actions\CreateShippingAction';
