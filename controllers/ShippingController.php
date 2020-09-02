@@ -36,7 +36,7 @@ class ShippingController extends ActiveController {
 
     public function prepareDataProvider(){
       return new ActiveDataProvider([
-        'query' => Shipping::find()->where(['origin_branch_office' => 2]),
+        'query' => Shipping::find(),
       ]);
     }
 }
