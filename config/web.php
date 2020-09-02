@@ -42,6 +42,10 @@ $config = [
                 [ 'class' => 'yii\rest\UrlRule',
                   'controller' => 'service-type',
                 ],
+                [ 'class' => 'yii\rest\UrlRule',
+                  'controller' => 'login',
+                  'pluralize' => false,
+                ],
             ],
         ],
         'request' => [
@@ -56,7 +60,8 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
+            'loginUrl' => null,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

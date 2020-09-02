@@ -24,7 +24,7 @@ use yii\behaviors\BlameableBehavior;
  * @property BranchOffice $branchOffice
  * @property Access $access
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
      * {@inheritdoc}
@@ -52,7 +52,8 @@ class User extends \yii\db\ActiveRecord
         return [
             [['status', 'role_id', 'access_id', 'branch_office_id'], 'integer'],
             [['role_id', 'branch_office_id'], 'required'],
-            [['username', 'auth_key', 'created_at', 'updated_at'], 'string', 'max' => 45],
+            [['access_token'], 'string', 'max' => 128],
+            [['username', 'created_at', 'updated_at'], 'string', 'max' => 45],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['role_id'], 'exist', 'skipOnError' => true, 'targetClass' => Role::className(), 'targetAttribute' => ['role_id' => 'id']],
             [['branch_office_id'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['branch_office_id' => 'id']],
@@ -70,7 +71,7 @@ class User extends \yii\db\ActiveRecord
             'username' => 'Username',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
-            'auth_key' => 'Auth Key',
+            'access_token' => 'Access Token',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -115,8 +116,7 @@ class User extends \yii\db\ActiveRecord
         $fields = parent::fields();
 
         // quita los campos con información sensible
-        unset( $fields['auth_key'],
-               $fields['password_hash'],
+        unset( //$fields['password_hash'],
                $fields['password_reset_token'],
                $fields['role_id'],
                $fields['branch_office_id']
@@ -129,4 +129,23 @@ class User extends \yii\db\ActiveRecord
     {
         return ['branchOffice', 'role'];
     }
+
+    public static function findIdentity($id)
+    {
+        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey() {}
+
+    public function validateAuthKey($authKey) {}
 }
