@@ -6,21 +6,42 @@ use Yii;
 use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
 use app\models\Shipping;
+use yii\filters\auth\HttpBearerAuth;
 
 class ShippingController extends ActiveController {
 
     public $modelClass = 'app\models\Shipping';
 
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
+
+    public function behaviors() {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => HttpBearerAuth::className(),
+        ];
+        return $behaviors;
+    }
+
+
     public function actionIndex() {
-      return new ActiveDataProvider([
-        'query' => Shipping::find(),
-      ]);
+
+
     }
 
     public function actions(){
       $actions = parent::actions();
       $actions['create']['class'] = 'app\actions\CreateShippingAction';
-      return $actions;
+      $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
 
+      return $actions;
+    }
+
+    public function prepareDataProvider(){
+      return new ActiveDataProvider([
+        'query' => Shipping::find()->where(['origin_branch_office' => 2]),
+      ]);
     }
 }
