@@ -4,13 +4,22 @@ namespace app\actions;
 use Yii;
 use yii\rest\CreateAction;
 use yii\helpers\Url;
+
 use app\models\ShippingItem;
+use app\models\User;
+use app\components\HttpTokenAuth;
+use app\util\Status;
 
 class CreateShippingAction extends CreateAction {
 
     public function run() {
       $model = new $this->modelClass();
       $params = Yii::$app->getRequest()->getBodyParams();
+
+      $user = User::findIdentityByAccessToken( HttpTokenAuth::getToken() );
+      $params['origin_branch_office'] = $user->branchOffice->id;
+      $params['status'] = Status::SHIPPING_NEW;
+
       $model->load($params, '');
 
       $anyErrors = false;
@@ -39,7 +48,6 @@ class CreateShippingAction extends CreateAction {
              $error = [ 'error' => 'No se agregó ningun item!' ];
              $anyErrors = true;
            }
-
 
            if ($anyErrors){
              $transaction->rollBack();
