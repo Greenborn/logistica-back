@@ -25,12 +25,12 @@ class LoginAction extends CreateAction {
 
     if ($status)
         $response->data = [
-          'status' => 'success',
+          'status' => $status,
           'token'  => $user->access_token,
         ];
     else
       $response->data = [
-          'status' => 'failure',
+          'status' => $status,
           'message' => 'Unauthorize Access!',
       ];
   }
