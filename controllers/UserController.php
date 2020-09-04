@@ -6,19 +6,23 @@ use yii\data\ActiveDataProvider;
 
 use app\modules\v1\models\User;
 
-class UserController extends ActiveController {
+class UserController extends BaseController {
 
     public $modelClass = 'app\models\User';
 
-    public $serializer = [
-        'class' => 'yii\rest\Serializer',
-        'collectionEnvelope' => 'items',
-    ];
+    public function actions(){
+      $actions = parent::actions();
+      unset( $actions['delete'],
+             $actions['update'],
+             $actions['create']
+           );
+
+      return $actions;
+    }
 
     public function actionIndex() {
       return new ActiveDataProvider([
         'query' => User::find(),
       ]);
     }
-
 }

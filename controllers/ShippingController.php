@@ -43,11 +43,19 @@ class ShippingController extends BaseController {
     }
 
     public function checkAccess($action, $model = null, $params = []) {
+      $user = User::findIdentityByAccessToken( HttpTokenAuth::getToken() );
+
       if ($action === 'update' || $action === 'delete') {
-        $user = User::findIdentityByAccessToken( HttpTokenAuth::getToken() );
         if ( $user->branchOffice->id != $model->originBranchOffice->id ){
-            throw new \yii\web\ForbiddenHttpException('El usuario solo puede actualizar o eliminar envíos cuya sucursal de origen sea igual a su sucursal');
+            throw new \yii\web\ForbiddenHttpException('El usuario solo puede crear/actualizar envíos cuya sucursal de origen sea igual a su sucursal');
         }
+      }
+
+      if ($action == 'view'){
+        if ( $user->branchOffice->id != $model->originBranchOffice->id  && $user->branchOffice->id != $model->destinationBranchOffice->id){
+            throw new \yii\web\ForbiddenHttpException('El usuario solo puede ver envíos cuya sucursal de origen/destino sea igual a su sucursal');
+        }
+
       }
     }
 }
