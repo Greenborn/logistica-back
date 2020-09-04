@@ -71,7 +71,7 @@ class CreateShippingAction extends CreateAction {
           throw new ServerErrorHttpException('Failed to create the object for unknown reason.');
         }
       } catch (\Throwable $e) {
-        $response->setStatusCode(400);
+        $response->setStatusCode(500);
         $response->format = \yii\web\Response::FORMAT_JSON;
         $response->data = [ 'message' => $e->getMessage() ];
       }

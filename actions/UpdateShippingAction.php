@@ -62,7 +62,7 @@ class UpdateShippingAction extends UpdateAction {
         }
 
       } catch (\Throwable $e) {
-        $response->setStatusCode(400);
+        $response->setStatusCode(500);
         $response->format = \yii\web\Response::FORMAT_JSON;
         $response->data = [ 'message' => $e->getMessage() ];
       }
