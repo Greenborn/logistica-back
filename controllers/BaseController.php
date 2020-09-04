@@ -8,7 +8,6 @@ use yii\filters\Cors;
 
 use app\components\HttpTokenAuth;
 use app\models\Shipping;
-use app\components\HttpTokenAuth;
 
 class BaseController extends ActiveController {
 
