@@ -11,5 +11,7 @@ api:
     - sudo cp controllers/* "$ROOT/controllers"
     - sudo cp models/* "$ROOT/models"
     - sudo cp actions/* "$ROOT/actions"
+    - sudo cp util/* "$ROOT/util"
+    - sudo cp components/* "$ROOT/components"
   rules:
     - if: $CI_COMMIT_BRANCH == 'dev'
