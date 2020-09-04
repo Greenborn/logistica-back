@@ -4,7 +4,10 @@ namespace app\actions;
 use Yii;
 use yii\rest\UpdateAction;
 use yii\helpers\Url;
+
 use app\models\ShippingItem;
+use app\models\User;
+use app\components\HttpTokenAuth;
 
 class UpdateShippingAction extends UpdateAction {
 
@@ -12,7 +15,12 @@ class UpdateShippingAction extends UpdateAction {
       $response = Yii::$app->getResponse();
       $model = $this->modelClass::find()->where(['id' => $id])->one();
       $params = Yii::$app->getRequest()->getBodyParams();
+
+      $user = User::findIdentityByAccessToken( HttpTokenAuth::getToken() );
+      $params['origin_branch_office'] = $user->branchOffice->id;
+
       $model->load($params, '');
+
       $anyErrors = false;
       $errorMsg = '';
 
@@ -54,7 +62,7 @@ class UpdateShippingAction extends UpdateAction {
         }
 
       } catch (\Throwable $e) {
-        $response->setStatusCode(400);
+        $response->setStatusCode(500);
         $response->format = \yii\web\Response::FORMAT_JSON;
         $response->data = [ 'message' => $e->getMessage() ];
       }

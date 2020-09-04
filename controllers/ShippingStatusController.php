@@ -1,28 +1,31 @@
 <?php
+
 namespace app\controllers;
 
-use yii\rest\ActiveController;
+use Yii;
 use yii\data\ActiveDataProvider;
+use app\models\ShippingType;
 
-use app\modules\v1\models\User;
+class ShippingStatusController extends BaseController {
 
-class UserController extends BaseController {
-
-    public $modelClass = 'app\models\User';
+    public $modelClass = 'app\util\Status';
 
     public function actions(){
       $actions = parent::actions();
       unset( $actions['delete'],
              $actions['update'],
-             $actions['create']
+             $actions['create'],
+             $actions['view'],
            );
+
+      $actions['index']['class'] = 'app\actions\StatusIndexAction';
 
       return $actions;
     }
 
     public function actionIndex() {
       return new ActiveDataProvider([
-        'query' => User::find(),
+        'query' => ShippingType::find(),
       ]);
     }
 }

@@ -135,11 +135,6 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
     }
 
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        return static::findOne(['access_token' => $token]);
-    }
-
     public function getId()
     {
         return $this->id;
@@ -148,4 +143,8 @@ class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getAuthKey() {}
 
     public function validateAuthKey($authKey) {}
+
+    public static function findIdentityByAccessToken($token, $type = null){
+      return static::find()->where(['access_token' => $token])->with('branchOffice')->one();
+    }
 }

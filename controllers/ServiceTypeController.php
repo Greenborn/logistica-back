@@ -3,13 +3,22 @@
 namespace app\controllers;
 
 use Yii;
-use yii\rest\ActiveController;
 use yii\data\ActiveDataProvider;
 use app\models\ServiceType;
 
-class ServiceTypeController extends ActiveController {
+class ServiceTypeController extends BaseController {
 
     public $modelClass = 'app\models\ServiceType';
+
+    public function actions(){
+      $actions = parent::actions();
+      unset( $actions['delete'],
+             $actions['update'],
+             $actions['create']
+           );
+
+      return $actions;
+    }
 
     public function actionIndex() {
       return new ActiveDataProvider([
