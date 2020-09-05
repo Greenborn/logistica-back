@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+
 /**
  * This is the model class for table "shipping".
  *
@@ -157,9 +158,11 @@ class Shipping extends \yii\db\ActiveRecord
                $fields['distance_id'],
                $fields['service_type_id'],
                $fields['destination_branch_office'],
-               $fields['origin_branch_office']
+               $fields['origin_branch_office'],
              );
-
+        $fields['status'] = function(){
+          return Status::getExtended($this->status);
+        };
         return $fields;
     }
 

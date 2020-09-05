@@ -8,7 +8,7 @@ use yii\helpers\Url;
 use app\models\ShippingItem;
 use app\models\User;
 use app\components\HttpTokenAuth;
-use app\util\Status;
+use app\util\Flags;
 
 class CreateShippingAction extends CreateAction {
 
@@ -18,7 +18,7 @@ class CreateShippingAction extends CreateAction {
 
       $user = User::findIdentityByAccessToken( HttpTokenAuth::getToken() );
       $params['origin_branch_office'] = $user->branchOffice->id;
-      $params['status'] = Status::SHIPPING_NEW;
+      $params['status'] = Flags::SHIPPING_NEW;
 
       $model->load($params, '');
 

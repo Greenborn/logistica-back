@@ -8,7 +8,7 @@ use app\models\ShippingType;
 
 class ShippingStatusController extends BaseController {
 
-    public $modelClass = 'app\util\Status';
+    public $modelClass = 'app\models\Status';
 
     public function actions(){
       $actions = parent::actions();
