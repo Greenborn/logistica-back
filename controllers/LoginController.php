@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use yii\rest\ActiveController;
+use yii\filters\Cors;
 
 class LoginController extends ActiveController {
 
