@@ -158,8 +158,7 @@ class Shipping extends \yii\db\ActiveRecord
                $fields['distance_id'],
                $fields['service_type_id'],
                $fields['destination_branch_office'],
-               $fields['origin_branch_office'],
-             );
+               $fields['origin_branch_office'] );
         $fields['status'] = function(){
           return Status::getExtended($this->status);
         };
