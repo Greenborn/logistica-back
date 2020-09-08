@@ -12,7 +12,7 @@ use app\util\Flags;
 
 class CreateShippingAction extends CreateAction {
 
-    private $pdfApiUrl = 'http://static-logistica.coodesoft.com.ar/web/index.php?r=remito/index';
+    private $pdfApiUrl = 'http://static-logistica.coodesoft.com.ar/index.php?r=remito/index';
 
     public function run() {
       $model = new $this->modelClass();
