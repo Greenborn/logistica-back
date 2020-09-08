@@ -12,7 +12,7 @@ use app\util\Flags;
 
 class CreateShippingAction extends CreateAction {
 
-    private $pdfApiUrl = 'http://static-logistica.coodesoft.com.ar/web/index.php&r=remito/view';
+    private $pdfApiUrl = 'http://static-logistica.coodesoft.com.ar/web/index.php?r=remito/index';
 
     public function run() {
       $model = new $this->modelClass();
@@ -63,7 +63,7 @@ class CreateShippingAction extends CreateAction {
              $id = implode(',', array_values($model->getPrimaryKey(true)));
              $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));
 
-             $remitoUrl = $this->pdfApiUrl . '?id='.$model->id.'&token='.$user->access_token;
+             $remitoUrl = $this->pdfApiUrl . '&id='.$model->id.'&token='.$user->access_token;
 
              return [
                $model,
