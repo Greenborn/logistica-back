@@ -66,7 +66,7 @@ class CreateShippingAction extends CreateAction {
              $remitoUrl = $this->pdfApiUrl . '&id='.$model->id.'&token='.$user->access_token;
 
              return [
-               $model,
+               'shipping' => $model,
                '_links' => [
                  'remito' => [
                    'original' => $remitoUrl,
