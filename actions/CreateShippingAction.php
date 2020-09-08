@@ -12,6 +12,8 @@ use app\util\Flags;
 
 class CreateShippingAction extends CreateAction {
 
+    private $pdfApiUrl = 'http://static-logistica.coodesoft.com.ar/web/index.php&r=remito/view';
+
     public function run() {
       $model = new $this->modelClass();
       $params = Yii::$app->getRequest()->getBodyParams();
@@ -60,7 +62,20 @@ class CreateShippingAction extends CreateAction {
              $response->setStatusCode(201);
              $id = implode(',', array_values($model->getPrimaryKey(true)));
              $response->getHeaders()->set('Location', Url::toRoute([$this->viewAction, 'id' => $id], true));
-             return $model;
+
+             $remitoUrl = $this->pdfApiUrl . '?id='.$model->id.'&token='.$user->access_token;
+
+             return [
+               $model,
+               '_links' => [
+                 'remito' => [
+                   'original' => $remitoUrl,
+                   'remito_duplicado' => $remitoUrl .'&type=doubled',
+                   'remito_triplicado' => $remitoUrl .'&type=tripled',
+                   'remito_cuadruplicado' => $remitoUrl . '&type=cuadrupled',
+                 ]
+               ]
+             ];
            }
 
         } elseif ($model->hasErrors()) {
