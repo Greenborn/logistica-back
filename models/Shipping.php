@@ -43,8 +43,8 @@ class Shipping extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'price', 'status'], 'required'],
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status'], 'integer'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'price', 'status', 'payment_at_origin'], 'required'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status', 'payment_at_origin'], 'integer'],
             [['price'], 'number'],
             [['origin_full_name', 'origin_contact', 'destination_full_name', 'destination_contact'], 'string', 'max' => 45],
             [['destination_address'], 'string', 'max' => 50],
