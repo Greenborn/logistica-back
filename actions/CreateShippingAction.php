@@ -6,6 +6,8 @@ use yii\rest\CreateAction;
 use yii\helpers\Url;
 
 use app\models\ShippingItem;
+use app\models\IdentificationType;
+use app\models\Identification;
 use app\models\User;
 use app\components\HttpTokenAuth;
 use app\util\Flags;
@@ -22,7 +24,6 @@ class CreateShippingAction extends CreateAction {
       $params['origin_branch_office'] = $user->branchOffice->id;
       $params['status'] = Flags::SHIPPING_NEW;
 
-      $model->load($params, '');
 
       $anyErrors = false;
       $error = null;
@@ -30,6 +31,16 @@ class CreateShippingAction extends CreateAction {
 
       try {
         $transaction = ShippingItem::getDb()->beginTransaction();
+
+        $paramsIdentification = $params['sender_identification'];
+        $createdIdentification = $this->storeIdentification($paramsIdentification);
+        $model->sender_identification_id = $createdIdentification->id;
+
+        $paramsIdentification = $params['receiver_identification'];
+        $createdIdentification = $this->storeIdentification($paramsIdentification);
+        $model->receiver_identification_id = $createdIdentification->id;
+
+        $model->load($params, '');
         if ($model->save()) {
 
            if ( isset($params['items']) && !empty($params['items']) ) {
@@ -90,5 +101,22 @@ class CreateShippingAction extends CreateAction {
         $response->format = \yii\web\Response::FORMAT_JSON;
         $response->data = [ 'message' => $e->getMessage() ];
       }
+    }
+
+    protected function storeIdentification($identification){
+
+      $idType = IdentificationType::findone($identification['type']);
+
+      if (!$idType)
+        throw new \Exception("El id del tipo de identificación es inválido", 1);
+
+      $newModelId = new Identification();
+      $newModelId->value = $identification['value'];
+      $newModelId->identification_type = $idType->id;
+
+      if ( !$newModelId->save() )
+        throw new \Exception("No se pudo guardar la identificación ". json_encode($newModelId->errors), 1);
+
+      return $newModelId;
     }
 }
