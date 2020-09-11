@@ -27,6 +27,8 @@ class LoginAction extends CreateAction {
         $response->data = [
           'status' => $status,
           'token'  => $user->access_token,
+          'branchOffice' => $user->branchOffice,
+          'username' => $user->username,
         ];
     else
       $response->data = [
