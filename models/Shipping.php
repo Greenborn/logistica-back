@@ -44,7 +44,7 @@ class Shipping extends \yii\db\ActiveRecord
     {
         return [
             [['distance_id', 'service_type_id', 'shipping_type_id', 'price', 'status', 'payment_at_origin'], 'required'],
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status', 'payment_at_origin'], 'integer'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status', 'payment_at_origin', 'sender_identification_id', 'receiver_identification_id'], 'integer'],
             [['price'], 'number'],
             [['origin_full_name', 'origin_contact', 'destination_full_name', 'destination_contact'], 'string', 'max' => 45],
             [['destination_address'], 'string', 'max' => 50],
@@ -54,9 +54,11 @@ class Shipping extends \yii\db\ActiveRecord
             [['service_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ServiceType::className(), 'targetAttribute' => ['service_type_id' => 'id']],
             [['origin_branch_office'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['origin_branch_office' => 'id']],
             [['destination_branch_office'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['destination_branch_office' => 'id']],
+            [['sender_identification_id'], 'exist', 'skipOnError' => true, 'targetClass' => Identification::className(), 'targetAttribute' => ['sender_identification_id' => 'id']],
+            [['receiver_identification_id'], 'exist', 'skipOnError' => true, 'targetClass' => Identification::className(), 'targetAttribute' => ['sender_identification_id' => 'id']],
+
         ];
     }
-
     /**
      * {@inheritdoc}
      */
@@ -77,6 +79,8 @@ class Shipping extends \yii\db\ActiveRecord
             'destination_branch_office' => 'Destination Branch Office',
             'price' => 'Price',
             'status' => 'Status',
+            'sender_identification_id' => 'Sender Identification ID',
+            'receiver_identification_id' => 'Receiver Identification ID',
         ];
     }
 
@@ -150,18 +154,40 @@ class Shipping extends \yii\db\ActiveRecord
         return $this->hasOne(BranchOffice::className(), ['id' => 'destination_branch_office'])->inverseOf('shippings');
     }
 
+    public function getSenderIdentification()
+    {
+        return $this->hasOne(Identification::className(), ['id' => 'sender_identification_id'])->inverseOf('shippings');
+    }
+
+    public function getReceiverIdentification()
+    {
+        return $this->hasOne(Identification::className(), ['id' => 'receiver_identification_id'])->inverseOf('shippings0');
+    }
+
     public function fields() {
         $fields = parent::fields();
 
-        // quita los campos con información sensible
         unset( $fields['shipping_type_id'],
                $fields['distance_id'],
                $fields['service_type_id'],
                $fields['destination_branch_office'],
-               $fields['origin_branch_office'] );
+               $fields['origin_branch_office'],
+               $fields['sender_identification_id'],
+               $fields['receiver_identification_id']
+              );
+
         $fields['status'] = function(){
           return Status::getExtended($this->status);
         };
+
+        $fields['sender_identification'] = function() {
+          return $this->senderIdentification;
+        };
+
+        $fields['receiver_identification'] = function() {
+          return $this->receiverIdentification;
+        };
+
         return $fields;
     }
 
