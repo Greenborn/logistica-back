@@ -38,7 +38,8 @@ class ShippingController extends BaseController {
       return new ActiveDataProvider([
         'query' => Shipping::find()
                    ->where(['origin_branch_office' => $user->branchOffice->id])
-                   ->orWhere(['destination_branch_office' => $user->branchOffice->id]),
+                   ->orWhere(['destination_branch_office' => $user->branchOffice->id])
+                   ->orderBy(['date' => SORT_DESC]),
       ]);
     }
 
