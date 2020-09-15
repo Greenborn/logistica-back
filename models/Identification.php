@@ -86,10 +86,7 @@ class Identification extends \yii\db\ActiveRecord
         unset( $fields['identification_type'] );
 
         $fields['identification_type'] = function(){
-          return [
-            'id' => $this->id,
-            'value' => $this->value,
-          ];
+          return $this->identificationType;
         };
 
 
