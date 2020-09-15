@@ -196,7 +196,8 @@ class Shipping extends \yii\db\ActiveRecord
                  'serviceType',
                  'destinationBranchOffice',
                  'shippingType',
-                 'shippingItems'
+                 'shippingItems',
+                 'distance'
                ];
     }
 }
