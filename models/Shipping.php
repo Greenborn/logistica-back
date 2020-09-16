@@ -186,7 +186,7 @@ class Shipping extends \yii\db\ActiveRecord
                $fields['origin_branch_office'],
                $fields['sender_identification_id'],
                $fields['receiver_identification_id'],
-               $fields['vehicle_id'],
+               $fields['vehicle_id']
               );
 
         $fields['status'] = function(){
