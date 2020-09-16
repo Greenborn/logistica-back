@@ -44,7 +44,7 @@ class Shipping extends \yii\db\ActiveRecord
     {
         return [
             [['distance_id', 'service_type_id', 'shipping_type_id', 'price', 'status', 'payment_at_origin'], 'required'],
-            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status', 'payment_at_origin', 'sender_identification_id', 'receiver_identification_id'], 'integer'],
+            [['distance_id', 'service_type_id', 'shipping_type_id', 'origin_branch_office', 'destination_branch_office', 'status', 'payment_at_origin', 'sender_identification_id', 'receiver_identification_id', 'vehicle_id'], 'integer'],
             [['price'], 'number'],
             [['origin_full_name', 'origin_contact', 'destination_full_name', 'destination_contact'], 'string', 'max' => 45],
             [['destination_address'], 'string', 'max' => 50],
