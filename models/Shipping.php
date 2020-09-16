@@ -56,7 +56,7 @@ class Shipping extends \yii\db\ActiveRecord
             [['destination_branch_office'], 'exist', 'skipOnError' => true, 'targetClass' => BranchOffice::className(), 'targetAttribute' => ['destination_branch_office' => 'id']],
             [['sender_identification_id'], 'exist', 'skipOnError' => true, 'targetClass' => Identification::className(), 'targetAttribute' => ['sender_identification_id' => 'id']],
             [['receiver_identification_id'], 'exist', 'skipOnError' => true, 'targetClass' => Identification::className(), 'targetAttribute' => ['sender_identification_id' => 'id']],
-
+            [['vehicle_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vehicle::className(), 'targetAttribute' => ['vehicle_id' => 'id']],
         ];
     }
     /**
@@ -81,6 +81,7 @@ class Shipping extends \yii\db\ActiveRecord
             'status' => 'Status',
             'sender_identification_id' => 'Sender Identification ID',
             'receiver_identification_id' => 'Receiver Identification ID',
+            'vehicle_id' => 'Vehicle ID',
         ];
     }
 
@@ -164,6 +165,17 @@ class Shipping extends \yii\db\ActiveRecord
         return $this->hasOne(Identification::className(), ['id' => 'receiver_identification_id'])->inverseOf('shippings0');
     }
 
+    /**
+     * Gets query for [[Vehicle]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVehicle()
+    {
+        return $this->hasOne(Vehicle::className(), ['id' => 'vehicle_id'])->inverseOf('shippings');
+    }
+
+
     public function fields() {
         $fields = parent::fields();
 
@@ -173,7 +185,8 @@ class Shipping extends \yii\db\ActiveRecord
                $fields['destination_branch_office'],
                $fields['origin_branch_office'],
                $fields['sender_identification_id'],
-               $fields['receiver_identification_id']
+               $fields['receiver_identification_id'],
+               $fields['vehicle_id'],
               );
 
         $fields['status'] = function(){
@@ -197,7 +210,8 @@ class Shipping extends \yii\db\ActiveRecord
                  'destinationBranchOffice',
                  'shippingType',
                  'shippingItems',
-                 'distance'
+                 'distance',
+                 'vehicle'
                ];
     }
 }
